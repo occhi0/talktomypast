@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Parla con il tuo io del tempo</title>
+  <style>
+    body { font-family: 'Courier New', monospace; background: #fdfcf9; padding: 2em; color: #333; }
+    h1 { font-size: 1.8em; margin-bottom: 0.2em; }
+    textarea { width: 100%; height: 120px; font-size: 1em; margin-top: 1em; }
+    button { margin-top: 1em; padding: 0.6em 1.2em; font-size: 1em; background: #333; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    #response { margin-top: 2em; background: #fff; padding: 1em; border-radius: 8px; border: 1px solid #ccc; white-space: pre-wrap; }
+    label { display: block; margin-top: 1em; font-size: 0.95em; }
+  </style>
+</head>
+<body>
+  <h1>Parla con il tuo io del tempo</h1>
+  <p>Scrivi un pensiero al tuo io del passato o del futuro. Riceverai una risposta poetica e riflessiva.</p>
+
+  <label for="persona">Chi vuoi che ti risponda?</label>
+  <select id="persona">
+    <option value="passato">Il mio io del passato</option>
+    <option value="futuro">Il mio io del futuro</option>
+  </select>
+
+  <textarea id="userInput" placeholder="Scrivi qui il tuo messaggio..."></textarea><br>
+  <button onclick="sendMessage()">Invia nel tempo</button>
+  <div id="response"></div>
+
+  <script>
+    async function sendMessage() {
+      const userInput = document.getElementById("userInput").value;
+      const persona = document.getElementById("persona").value;
+      const responseDiv = document.getElementById("response");
+
+      const promptBase = persona === "passato"
+        ? "Rispondi come se fossi l'io del passato: ironico, riflessivo, un po’ impacciato ma pieno di cuore."
+        : "Rispondi come se fossi l'io del futuro: calmo, saggio, malinconico, come chi ha vissuto e ascolta con empatia.";
+
+      responseDiv.textContent = "Attendi... sto cercando nel tempo.";
+        },
+        body: JSON.stringify({
+          model: "gpt-4",
+          messages: [
+            { role: "system", content: promptBase },
+            { role: "user", content: userInput }
+          ]
+        })
+      });
+
+      const data = await response.json();
+      responseDiv.textContent = data.choices?.[0]?.message?.content || "Nessuna risposta trovata.";
+    }
+  </script>
+</body>
+</html>
