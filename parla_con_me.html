@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Messaggio nel tempo</title>
+  <style>
+    body {
+      font-family: monospace;
+      background-color: #fff1d6;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    textarea {
+      width: 100%;
+      height: 150px;
+    }
+    #risposta {
+      margin-top: 30px;
+      font-style: italic;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>📨 Messaggio nel tempo</h1>
+
+  <label for="nome">Come vuoi essere chiamato?</label><br />
+  <input type="text" id="nome" placeholder="Es. Marco, Stella, Capitano" /><br /><br />
+
+  <label for="persona">Scegli il mittente:</label><br />
+  <select id="persona">
+    <option value="futuro">Il tuo io del futuro</option>
+    <option value="passato">Il tuo io del passato</option>
+  </select><br /><br />
+
+  <label for="messaggio">Scrivi il tuo messaggio:</label><br />
+  <textarea id="messaggio" placeholder="Es. Vorrei sapere se ho imparato ad amare incondizionatamente..."></textarea><br />
+
+  <button onclick="invia()">Invia il messaggio</button>
+
+  <div id="risposta">In attesa della risposta...</div>
+
+  <script>
+    async function invia() {
+      const nome = document.getElementById('nome').value || 'Utente';
+      const messaggio = document.getElementById('messaggio').value;
+      const persona = document.getElementById('persona').value;
+      const risposta = document.getElementById('risposta');
+
+      risposta.textContent = "Aspetta... sto viaggiando nel tempo ⏳";
+
+      try {
+        const res = await fetch("https://TUO-URL-REPLIT/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ nome, messaggio, persona })
+        });
+
+        const data = await res.json();
+        risposta.textContent = data.risposta;
+      } catch (err) {
+        risposta.textContent = "Errore nel viaggio temporale 🌀";
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>
