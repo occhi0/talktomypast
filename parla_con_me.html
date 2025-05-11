@@ -3,41 +3,72 @@
 <head>
   <meta charset="UTF-8">
   <title>Messaggio nel tempo</title>
+  <style>
+    body {
+      font-family: monospace;
+      background: #fff5dc;
+      text-align: center;
+      padding: 2rem;
+    }
+    textarea, select, input {
+      width: 80%;
+      margin: 1rem auto;
+      display: block;
+      padding: 1rem;
+      font-size: 1rem;
+    }
+    button {
+      background-color: #1a1a1a;
+      color: white;
+      padding: 1rem 2rem;
+      border: none;
+      cursor: pointer;
+    }
+    .risposta {
+      margin-top: 2rem;
+      font-style: italic;
+    }
+  </style>
 </head>
 <body>
-  <h1>Messaggio nel tempo</h1>
+  <h1>📝 Messaggio nel tempo</h1>
 
   <label for="persona">Scegli il mittente:</label>
   <select id="persona">
     <option value="passato">Il tuo io del passato</option>
     <option value="futuro">Il tuo io del futuro</option>
-  </select><br><br>
+  </select>
 
-  <textarea id="messaggio" rows="4" cols="50" placeholder="Scrivi il tuo messaggio..."></textarea><br><br>
+  <label for="messaggio">Scrivi il tuo messaggio:</label>
+  <textarea id="messaggio" rows="5" placeholder="Vorrei saper amare incondizionatamente..."></textarea>
 
-  <button onclick="inviaMessaggio()">Invia il messaggio</button>
+  <button onclick="invia()">Invia il messaggio</button>
 
-  <h3>Risposta:</h3>
-  <div id="risposta" style="white-space: pre-wrap;"></div>
+  <div class="risposta" id="risposta"></div>
 
   <script>
-    async function inviaMessaggio() {
-      const messaggio = document.getElementById("messaggio").value;
-      const persona = document.getElementById("persona").value;
-      const rispostaDiv = document.getElementById("risposta");
+    async function invia() {
+      const messaggio = document.getElementById('messaggio').value;
+      const persona = document.getElementById('persona').value;
+      const risposta = document.getElementById('risposta');
+      
+      risposta.textContent = "Aspetta... sto viaggiando nel tempo ⏳";
 
-      rispostaDiv.textContent = "In attesa della risposta...";
+      try {
+        const res = await fetch("https://71586497-ff47-4121-82e5-beeea9fe393b-00-3rjm4nhdfus0r.kirk.replit.dev/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ messaggio, persona })
+        });
 
-      const response = await fetch("https://71586497-ff47-4121-82e5-beeea9fe393b-00-3rjm4nhdfus0r.kirk.replit.dev/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ messaggio, persona })
-      });
-
-      const data = await response.json();
-      rispostaDiv.textContent = data.risposta || "Errore nella risposta.";
+        const data = await res.json();
+        risposta.textContent = data.risposta;
+      } catch (err) {
+        risposta.textContent = "Errore nel viaggio temporale 🚧";
+        console.error(err);
+      }
     }
   </script>
 </body>
