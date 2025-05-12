@@ -42,7 +42,6 @@
 
   <script>
     async function invia() {
-      const nome = document.getElementById('nome').value || 'Utente';
       const messaggio = document.getElementById('messaggio').value;
       const persona = document.getElementById('persona').value;
       const risposta = document.getElementById('risposta');
@@ -55,7 +54,7 @@
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ nome, messaggio, persona })
+          body: JSON.stringify({ messaggio, persona })
         });
 
         const data = await res.json();
